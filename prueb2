@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<script src="http://code.jquery.com/jquery-2.1.4.js"></script>
+	<script>
+            $(document).ready(function(){
+                $("#btngenerar1").click(function(){
+                    var filas=$("#txtfila").val();
+                    var stringHTML='<table id=tabla border="2">';
+
+                    for (var i = 0; i< filas; i++) {
+                            stringHTML+="<tr>";
+                                for (var j =0; j< filas;j++) {				
+                                    stringHTML+="<td class='campos'>X</td>"; 		
+                                };
+                            stringHTML+="</tr>";
+                    };
+                    stringHTML+="</table>";
+                    
+                    $("#divhtml").html(stringHTML);	
+            });
+
+
+                    
+                    
+                        $("#btngenerar2").click(function(){
+                            var id = $("#txtelemento").val();
+                            datos = {"id":Integer}; 
+                            
+                            $.ajax({
+                                   type:"POST",
+                                   url:"http://localhost:8080/ExmnRecu/url1/url2",,
+                                   contentType:"application/json",
+                                   dataType:"text",
+                                   data: JSON.stringify(datos) 
+                                   }).done(function(msg){
+                                       console.log("Usted insertó correctamente");
+                                   }).error(function(msg){
+                                       console.log("Problemas al insertar");
+                                   });                     
+                        });
+
+
+			$(document).ready(function(){
+                                $("#btnconsultar").click(function(){
+                                        $.ajax({
+                                            type:"GET",
+                                            url:"http://localhost:8080/ExmnRecu/url1/url2",
+                                            dataType:"json",
+                                            contentType:"text/plain"
+                                        }).done(function(msg){
+                                            console.log(msg);
+
+                                            var tabla="<table border=1>";
+
+                                            msg.forEach(function(elemento){
+                                                tabla+="<tr>"
+                                                tabla+="<td>" + elemento.descripcionX   +  "</td>"
+                                                tabla+="<td>" + elemento.ciudadActual.descripcion   +  "</td>"
+                                                tabla+="<td>" + elemento.listaTelefono[19].telefono   +  "</td>"
+                                                tabla+="</tr>"
+                                            });
+                                            tabla+="</table>"
+                                            $("#contenido").html(tabla)
+
+                                        }).error(function(err){
+                                                console.log(err);
+                                        });
+                                });
+                            
+                        });
+                });
+            
+	</script>
+</head>
+<body>
+	<div>
+		<form action="">		
+			<label>numero N</label>
+			<input type="text" id="txtfila" value="">
+                        <input type="button" id="btngenerar1" value="Generar Tabla">
+			<label>elementos</label>
+			<input type="text" id="txtelemtos" value="4">
+			<input type="button" id="btngenerar2" value="Generar Elementos">
+			<div id="divhtml"></div>
+		</form>
+	</div>
+</body>
+</html>
