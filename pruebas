@@ -1,0 +1,110 @@
+*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package clases;
+
+/**
+ *
+ * @author Freddy
+ */
+public class Montecarlo {
+    
+    double[][] distribucion, aux;
+    double[] aleatorio;
+    double inicial;
+    
+    boolean SumarAlAcumulado;
+    boolean AceptarReglaVentaPedido;
+    boolean SiEsMayorEjecutar;
+            
+    int ValorA, ValorB;
+
+    public Montecarlo(double[][] distribucion, double[] aleatorio, double inicial, boolean SumarAlAcumulado, boolean AceptarReglaVentaPedido, boolean SiEsMayorEjecutar, int ValorA, int ValorB) {
+        this.distribucion = distribucion;
+        this.aleatorio = aleatorio;
+        this.inicial = inicial;
+        this.SumarAlAcumulado = SumarAlAcumulado;
+        this.AceptarReglaVentaPedido = AceptarReglaVentaPedido;
+        this.SiEsMayorEjecutar = SiEsMayorEjecutar;
+        this.ValorA = ValorA;
+        this.ValorB = ValorB;
+        generarDistribucion(0.00000001);
+    }
+
+    private double[][] generarDistribucion(double aumento){
+        aux = new double[distribucion.length][4];
+        double contador=0;
+        for (int i = 0; i < distribucion.length; i++) {
+            double[] dr = new double[4];
+            dr[0] = distribucion[i][0];
+            
+            if(i == 0){
+                dr[1] = contador;
+            }else{
+                dr[1] = contador;//+aumento;
+            }
+            contador+=distribucion[i][1];
+            dr[2] = contador;
+            dr[3] = distribucion[i][1];
+            aux[i] = dr;
+        }
+        return aux;
+    }
+    
+    public double[][] getDistribucion(){
+        return aux;
+    }
+    
+    private double checkDistribucion(double valor){
+        for (int i = 0; i < aux.length; i++) {
+            if(valor >= aux[i][1] && valor <= aux[i][2]){
+                return aux[i][0];
+            }
+        }
+        return 0;
+    }
+    
+    public double[][] resolver(){
+        double[][] resultado = new double[aleatorio.length][6];
+        for (int i = 0; i < aleatorio.length; i++) {
+            resultado[i][0] = i+1;
+            resultado[i][1] = aleatorio[i];
+            resultado[i][2] = inicial;
+            resultado[i][3] = checkDistribucion(aleatorio[i]);
+            resultado[i][4] = regla1(resultado[i][3], SumarAlAcumulado);
+            resultado[i][5] = regla2(resultado[i][4], AceptarReglaVentaPedido, SiEsMayorEjecutar, ValorA, ValorB);
+            
+        }
+       return resultado;
+    }
+
+    private double regla1(double resultado, boolean sumar) {
+        if(sumar){
+            inicial+=resultado;
+        }else{
+            inicial-=resultado;
+        }
+        
+        return inicial;
+    }
+
+    private double regla2(double resultado, boolean si, boolean mayor, double vA, double vB) {
+        if(si){
+            if(mayor){
+                if(resultado > vA){
+                    inicial-=vB;
+                    return vB;
+                }
+            }else{
+                if(resultado <= vA){
+                    inicial+=vB;
+                    return vB;
+                }
+            }
+        }
+        return 0;
+    }
+    
+}
