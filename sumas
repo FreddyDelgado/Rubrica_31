@@ -1,0 +1,11 @@
+public static void main(String[] args) {
+    int n1, n2,suma;
+ 
+    n1=Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese primer numero"));
+    n2= Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese segundo numero"));
+ 
+    suma=n1+n2;
+ 
+ 
+    JOptionPane.showMessageDialog(null, suma); 
+                                                               }
