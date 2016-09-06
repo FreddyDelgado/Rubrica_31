@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/FreddyDelgado/Rubrica_31.svg?branch=master)](https://travis-ci.org/FreddyDelgado/Rubrica_31)
- package holamundo;
+// package holamundo;
+ 
    public class HolaMundo {
 public static void main(String[] args) {
  System.out.print("Hola Mundo!");
